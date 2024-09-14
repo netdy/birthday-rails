@@ -1,0 +1,51 @@
+<body class="pm-body">
+  <h1 class="pm-heading">เพิ่ม Person</h1>
+
+  <%= form_with model: @person, url: page_index_path, local: true, class: 'pm-form' do |form| %>
+    <div class="pm-form__group">
+      <%= form.label :nickname, "ชื่อเล่น", class: 'pm-form__label' %>
+      <%= form.text_field :nickname, class: 'pm-form__input' %>
+    </div>
+
+    <div class="pm-form__group">
+      <%= form.label :birthdate, "วันเกิด", class: 'pm-form__label' %>
+      <%= form.date_field :birthdate, class: 'pm-form__input' %>
+    </div>
+
+    <div class="pm-form__group">
+      <%= form.label :note, "หมายเหตุ", class: 'pm-form__label' %>
+      <%= form.text_area :note, class: 'pm-form__input pm-form__textarea' %>
+    </div>
+
+    <div class="pm-form__group">
+      <%= form.submit "บันทึก", class: 'pm-form__submit' %>
+    </div>
+  <% end %>
+
+  <h2 class="pm-heading">รายชื่อทั้งหมด</h2>
+
+  <table class="pm-table">
+    <thead>
+      <tr>
+        <th class="pm-table__header">ชื่อเล่น</th>
+        <th class="pm-table__header">วันเกิด</th>
+        <th class="pm-table__header">หมายเหตุ</th>
+        <th class="pm-table__header">แก้ไข</th>
+        <th class="pm-table__header">ลบ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @persons.each do |person| %>
+        <tr class="pm-table__row">
+          <td class="pm-table__cell" data-label="ชื่อเล่น"><%= person.nickname %></td>
+          <td class="pm-table__cell" data-label="วันเกิด"><%= person.birthdate %></td>
+          <td class="pm-table__cell" data-label="หมายเหตุ"><%= person.note %></td>
+          <td class="pm-table__cell" data-label="แก้ไข"><%= link_to 'แก้ไข', edit_page_path(person), class: 'pm-link' %></td>
+          <td class="pm-table__cell" data-label="ลบ">
+            <%= button_to 'ลบ', "/page/#{person.id}", method: :delete, data: { turbo_confirm: "คุณแน่ใจหรือไม่ว่าต้องการลบ?" }, class: 'pm-button' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</body>
