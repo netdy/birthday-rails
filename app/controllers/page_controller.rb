@@ -1,13 +1,13 @@
 class PageController < ApplicationController
+  before_action :authenticate_user
   def index
     @person = Person.new
-    @persons = Person.all
-    puts @persons.inspect
+    @persons = Person.where(user_id: @user_id)
   end
 
   def create
     @person = Person.new(person_params)
-
+    @person.user_id = @user_id
     if @person.save
       redirect_to page_index_path, notice: "บันทึกข้อมูลสำเร็จแล้ว!"
     else
@@ -36,6 +36,15 @@ class PageController < ApplicationController
       redirect_to page_index_path, notice: "ลบข้อมูลสำเร็จแล้ว!"
     else
       redirect_to page_index_path, alert: "ไม่สามารถลบข้อมูลได้"
+    end
+  end
+
+  def authenticate_user
+    if session[:user_id].present?
+      @user_id = session[:user_id]
+      puts @user_id
+    else
+      redirect_to controller: :login, action: :index
     end
   end
 

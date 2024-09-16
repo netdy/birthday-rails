@@ -10,12 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_14_044227) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_16_144133) do
   create_table "people", force: :cascade do |t|
     t.string "nickname"
     t.date "birthdate"
     t.text "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email"
+    t.integer "user_id"
   end
+
+  create_table "users", force: :cascade do |t|
+    t.string "username"
+    t.string "password_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "email"
+  end
+
+  add_foreign_key "people", "users"
 end

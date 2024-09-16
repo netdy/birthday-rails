@@ -1,18 +1,59 @@
-<div data-controller="toggle-switch">
-  <div class="toggle-switch">
-    <button data-action="click->toggle-switch#toggleLogin" data-toggle-switch-target="loginBtn" class="active">Login</button>
-    <button data-action="click->toggle-switch#toggleRegistration" data-toggle-switch-target="registrationBtn">Registration</button>
-  </div>
+<body>
+<div class="center-container">
+  <div data-controller="toggle-switch" class="toggle-switch-container">
+    <div class="toggle-switch">
+      <button data-action="click->toggle-switch#toggleLogin" data-toggle-switch-target="loginBtn" class="active">Login</button>
+      <button data-action="click->toggle-switch#toggleRegistration" data-toggle-switch-target="registrationBtn">Registration</button>
+    </div>
 
-  <div data-toggle-switch-target="loginForm">
-    <!-- Login form here -->
-    <h2>Login</h2>
+    <div data-toggle-switch-target="loginForm" class="form-container">
+      <!-- Login form here -->
+      <h2>Login</h2>
+      <turbo-frame id="error-messages">
+    </turbo-frame>
+      <%= form_with url: login_path, method: :post do |form| %>
+        <div>
+          <%= form.label :username %>
+          <%= form.text_field :username , required: true %>
+        </div>
+        <div>
+          <%= form.label :password %>
+          <%= form.password_field :password , required: true%>
+        </div>
+        <div>
+          <%= form.submit "Login" %>
+        </div>
+      <% end %>
+    </div>
 
-  </div>
-
-  <div data-toggle-switch-target="registrationForm" style="display: none;">
-    <!-- Registration form here -->
-    <h2>Registration</h2>
-
+    <div data-toggle-switch-target="registrationForm" class="form-container" style="display: none;">
+      <!-- Registration form here -->
+      <h2>Registration</h2>
+      <turbo-frame id="error-messages">
+    </turbo-frame>
+      <%= form_with url: register_path, method: :post do |form| %>
+        <div>
+          <%= form.label :username %>
+          <%= form.text_field :username , name: 'user[username]',required: true %>
+        </div>
+        <div>
+          <%= form.label :email %>
+          <%= form.email_field :email , name: 'user[email]',required: true %>
+        </div>
+        <div>
+          <%= form.label :password %>
+          <%= form.password_field :password ,name: 'user[password]',required: true %>
+        </div>
+        <div>
+          <%= form.label :password_confirmation %>
+          <%= form.password_field :password_confirmation , name: 'user[password_confirmation]',required: true %>
+        </div>
+        <div>
+          <%= form.submit "Register" %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
+</body>
+
