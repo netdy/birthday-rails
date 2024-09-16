@@ -28,5 +28,9 @@ test:
 # Similarly, if you deploy your application as a Docker container, you must
 # ensure the database is located in a persisted volume.
 production:
-  <<: *default
-  database: storage/development.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  database: birthday_data
+  username: netdy
+  password: haveagooddaywithbirthdayapp
+  host: db
