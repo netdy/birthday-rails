@@ -4,14 +4,15 @@
 ARG RUBY_VERSION=3.3.1
 FROM ruby:$RUBY_VERSION-alpine AS base
 
-RUN apt-get update -qq && \
-    apt-get install -y nodejs postgresql-client libpq-dev
 # Install essential runtime packages for Ruby and Rails app
 RUN apk add --no-cache \
     vips \
     tzdata \
     bash \
-    gcompat
+    gcompat \
+    nodejs \
+    postgresql-client \
+    libpq
 
 # Set working directory
 WORKDIR /rails
@@ -30,19 +31,18 @@ FROM base as build
 RUN apk add --no-cache --virtual .build-deps \
     build-base \
     git \
-    nodejs \
-    vips-dev \
-    && rm -rf /var/cache/apk/*
+    postgresql-dev \
+    vips-dev
 
 # Install gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install --jobs 4 --retry 3 
+RUN bundle config set --local without 'development test' && \
+    bundle install --jobs 4 --retry 3 
 
 # Clean up build artifacts
-RUN [ -d /usr/local/bundle/cache ] && rm -rf /usr/local/bundle/cache || true && \
-    [ -d ~/.bundle ] && rm -rf ~/.bundle || true && \
-    [ -d /usr/local/bundle/gems/ ] && find /usr/local/bundle/gems/ -name "*.c" -delete || true && \
-    [ -d /usr/local/bundle/gems/ ] && find /usr/local/bundle/gems/ -name "*.o" -delete || true
+RUN rm -rf /usr/local/bundle/cache/*.gem && \
+    find /usr/local/bundle/gems/ -name "*.c" -delete && \
+    find /usr/local/bundle/gems/ -name "*.o" -delete
 
 # Copy application code
 COPY . .
@@ -50,6 +50,9 @@ COPY . .
 # Precompile bootsnap and assets
 RUN bundle exec bootsnap precompile --gemfile && \
     bundle exec rails assets:precompile
+
+# Remove build dependencies
+RUN apk del .build-deps
 
 # Final stage
 FROM base
@@ -65,4 +68,4 @@ USER rails:rails
 
 # Expose the port and start the server
 EXPOSE 3000
-CMD ["./bin/rails", "db:prepare", "&&", "./bin/rails", "server", "-b", "0.0.0.0"]
+CMD ["sh", "-c", "bin/rails db:prepare && bin/rails server -b 0.0.0.0"]
