@@ -34,7 +34,7 @@ RUN apk add --no-cache --virtual .build-deps \
 
 # Install gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install --jobs 4 --retry 3 --without development test
+RUN bundle install --jobs 4 --retry 3 
 
 # Clean up build artifacts
 RUN [ -d /usr/local/bundle/cache ] && rm -rf /usr/local/bundle/cache || true && \
