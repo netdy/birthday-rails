@@ -2,6 +2,7 @@ class PageController < ApplicationController
   def index
     @person = Person.new
     @persons = Person.all
+    puts @persons.inspect
   end
 
   def create

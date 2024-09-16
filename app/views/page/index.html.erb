@@ -1,5 +1,17 @@
 <body class="pm-body">
-  <h1 class="pm-heading">เพิ่ม Person</h1>
+  <h1 class="pm-heading">ปฏิทินวันเกิด</h1>
+
+  <div class="calendar-container" data-controller="calendar" data-birthdays="<%= @persons.to_json(only: [:nickname, :birthdate, :note]) %>">
+    <div class="calendar-header">
+      <button data-action="calendar#previousMonth" class="nav-button">&lt;</button>
+      <h2 data-calendar-target="monthYear"></h2>
+      <button data-action="calendar#nextMonth" class="nav-button">&gt;</button>
+    </div>
+    <div data-calendar-target="calendar"></div>
+    <div data-calendar-target="tooltip" class="tooltip"></div>
+  </div>
+
+  <h2 class="pm-heading">เพิ่มคน</h2>
 
   <%= form_with model: @person, url: page_index_path, local: true, class: 'pm-form' do |form| %>
     <div class="pm-form__group">
@@ -24,7 +36,8 @@
 
   <h2 class="pm-heading">รายชื่อทั้งหมด</h2>
 
-  <table class="pm-table">
+<table class="pm-table-container">
+<table class="pm-table">
     <thead>
       <tr>
         <th class="pm-table__header">ชื่อเล่น</th>
@@ -38,7 +51,7 @@
       <% @persons.each do |person| %>
         <tr class="pm-table__row">
           <td class="pm-table__cell" data-label="ชื่อเล่น"><%= person.nickname %></td>
-          <td class="pm-table__cell" data-label="วันเกิด"><%= person.birthdate %></td>
+          <td class="pm-table__cell" data-label="วันเกิด"><%= person.birthdate.strftime('%d/%m/%Y') %></td>
           <td class="pm-table__cell" data-label="หมายเหตุ"><%= person.note %></td>
           <td class="pm-table__cell" data-label="แก้ไข"><%= link_to 'แก้ไข', edit_page_path(person), class: 'pm-link' %></td>
           <td class="pm-table__cell" data-label="ลบ">
@@ -48,4 +61,5 @@
       <% end %>
     </tbody>
   </table>
+</table>
 </body>

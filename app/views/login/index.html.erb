@@ -1,0 +1,18 @@
+<div data-controller="toggle-switch">
+  <div class="toggle-switch">
+    <button data-action="click->toggle-switch#toggleLogin" data-toggle-switch-target="loginBtn" class="active">Login</button>
+    <button data-action="click->toggle-switch#toggleRegistration" data-toggle-switch-target="registrationBtn">Registration</button>
+  </div>
+
+  <div data-toggle-switch-target="loginForm">
+    <!-- Login form here -->
+    <h2>Login</h2>
+
+  </div>
+
+  <div data-toggle-switch-target="registrationForm" style="display: none;">
+    <!-- Registration form here -->
+    <h2>Registration</h2>
+
+  </div>
+</div>
