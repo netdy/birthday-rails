@@ -4,6 +4,8 @@
 ARG RUBY_VERSION=3.3.1
 FROM ruby:$RUBY_VERSION-alpine AS base
 
+RUN apt-get update -qq && \
+    apt-get install -y nodejs postgresql-client libpq-dev
 # Install essential runtime packages for Ruby and Rails app
 RUN apk add --no-cache \
     vips \
