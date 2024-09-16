@@ -1,7 +1,9 @@
 name: CI
 
+env:
+  IMAGE_NAME: birthday
+
 on:
-  pull_request:
   push:
     branches: [ main ]
 
